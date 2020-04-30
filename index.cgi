@@ -21,7 +21,7 @@ logging.basicConfig(filename='f1l3.log',
 generic_logger = logging.getLogger('')
 db_logger = logging.getLogger("DATABASE")
 # some configurations
-FILE_CHUNK_SIZE = 100000
+FILE_CHUNK_SIZE = 40960
 UPLOAD_DIR = './files'
 
 request_scheme = os.environ.get('REQUEST_SCHEME', 'http')
