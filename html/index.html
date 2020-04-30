@@ -1,5 +1,54 @@
-<form method="POST" enctype="multipart/form-data" action="/">
-<pre>thing | curl -F upload=@- http://f1l3.0u0.fun/</pre>
-<input name="upload" type="file">
-<button type="submit">upload</button>
-</form>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>cutie</title>
+        <style type="text/css" media="screen">
+body {
+    background-color: #ff00ff;
+
+}
+.container {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    background-color: #08131a;
+    color: #deb88d;
+}
+@media only screen and (max-width: 799px) {
+    .container {
+        width:90vw;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+    .upload-cmd {
+        display: none;
+    }
+}
+@media only screen and (min-width: 800px) {
+    .container {
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        border-radius: 15px;
+        border: 3px solid #ff00ff;
+        left: 50%;
+    }
+    .upload-form {
+    margin: 15px 15px 15px 15px;
+    }
+
+}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>This is a F1L3 instance.</h1>
+            <form class='upload-form' method="POST" enctype="multipart/form-data" action="/">
+                <pre class='upload-cmd'>thing | curl -F upload=@- http://f1l3.0u0.fun/</pre>
+                <input name="upload" type="file">
+                <button type="submit">upload</button>
+            </form>
+        </div>
+    </body>
+</html>
