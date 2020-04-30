@@ -23,7 +23,10 @@ db_logger = logging.getLogger("DATABASE")
 # some configurations
 FILE_CHUNK_SIZE = 100000
 UPLOAD_DIR = './files'
-HOST = os.environ.get('HTTP_ORIGIN', 'http://localhost:8080')
+
+request_scheme = os.environ.get('REQUEST_SCHEME', 'http')
+server_name = os.environ.get('SERVER_NAME', 'localhost')
+HOST = request_scheme + '://' + server_name
 FILE_URL = HOST + '/files/'
 DATABASE = 'f1l3.sqlite3'
 
@@ -31,7 +34,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # http response
 def make_resp(html=''):
-    print("Content-type: text/html\r\n\r\n")
+    print("Content-type: text/html\r\n")
     print(html)
 def read_html(path):
     with open(path, 'r') as f:
@@ -96,6 +99,16 @@ def db_cursor():
     conn.close()
 
 # upload handling
+def is_utf8(path):
+    with open(path, 'rb') as f:
+        b = f.read(2048)
+    try:
+        b.decode('utf-8')
+    except UnicodeDecodeError:
+        return False
+    else:
+        return True
+
 def rand_str(length=10):
     b = urandom(length)
     k = b32encode(b)
@@ -134,6 +147,8 @@ def handle_upload():
         return
     filename = uploaded_file.filename
     ext = os.path.splitext(filename)[1] if filename else ''
+    if not ext:
+        ext = '.txt' if is_utf8(temp_path) else '.bin'
     with db_cursor() as c:
         c.execute(
             '''
