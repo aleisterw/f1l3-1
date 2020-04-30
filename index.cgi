@@ -18,11 +18,12 @@ logging.basicConfig(filename='f1l3.log',
                     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                     datefmt='%H:%M:%S',
                     level=logging.DEBUG)
+generic_logger = logging.getLogger('')
 db_logger = logging.getLogger("DATABASE")
 # some configurations
 FILE_CHUNK_SIZE = 100000
 UPLOAD_DIR = './files'
-HOST = os.environ.get('F1L3_HOST') or 'http://localhost:8080'
+HOST = os.environ.get('HTTP_ORIGIN', 'http://localhost:8080')
 FILE_URL = HOST + '/files/'
 DATABASE = 'f1l3.sqlite3'
 
