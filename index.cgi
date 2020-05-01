@@ -99,9 +99,7 @@ def db_cursor():
     conn.close()
 
 # upload handling
-def is_utf8(path):
-    with open(path, 'rb') as f:
-        b = f.read(2048)
+def is_utf8(b):
     try:
         b.decode('utf-8')
     except UnicodeDecodeError:
@@ -125,9 +123,13 @@ def handle_upload():
         return
     temp_path = "/tmp/" + rand_str()
     sha1_val = hashlib.sha1()
+    filename = uploaded_file.filename
+    ext = os.path.splitext(filename)[1] if filename else ''
     with open(temp_path, 'wb') as f:
         while True:
             chunk = uploaded_file.file.read(FILE_CHUNK_SIZE)
+            if not ext:
+                ext = '.txt' if is_utf8(chunk[:1024]) else '.bin'
             if not chunk: break
             f.write(chunk)
             sha1_val.update(chunk)
@@ -145,10 +147,6 @@ def handle_upload():
         os.remove(temp_path)
         make_resp(urljoin(FILE_URL, filename))
         return
-    filename = uploaded_file.filename
-    ext = os.path.splitext(filename)[1] if filename else ''
-    if not ext:
-        ext = '.txt' if is_utf8(temp_path) else '.bin'
     with db_cursor() as c:
         c.execute(
             '''
